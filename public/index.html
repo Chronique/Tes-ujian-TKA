@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Aplikasi ANBK - Pusmendik Style</title>
+    <style>
+        :root { --blue-anbk: #007bff; --dark-blue: #002d57; --yellow-ragu: #ffc107; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background: #f0f2f5; overflow: hidden; }
+        
+        /* Header & Footer */
+        header { background: var(--dark-blue); color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; height: 50px; }
+        footer { background: white; border-top: 1px solid #ccc; height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; position: fixed; bottom: 0; width: 100%; box-sizing: border-box; }
+
+        /* Main Layout */
+        .main-container { display: flex; height: calc(100vh - 110px); padding: 10px; box-sizing: border-box; gap: 10px; }
+        .pane { flex: 1; background: white; border-radius: 8px; overflow-y: auto; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .stimulus-img { max-width: 100%; margin: 15px 0; border: 1px solid #ddd; }
+
+        /* Question Styles */
+        .soal-title { font-weight: bold; font-size: 1.1em; margin-bottom: 10px; color: var(--dark-blue); border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .opsi-container { margin-top: 15px; }
+        .opsi-item { display: block; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; cursor: pointer; }
+        .opsi-item:hover { background: #f8f9fa; }
+        
+        /* Tabel Pernyataan */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        th { background: #f8f9fa; }
+
+        /* Modal Daftar Soal (Gaya Gambar No 3) */
+        #modal-grid { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background: white; padding: 20px; border-radius: 8px; width: 400px; position: relative; }
+        .grid-soal { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 15px; }
+        .grid-item { width: 40px; height: 40px; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 4px; font-weight: bold; }
+        .grid-item.active { background: var(--blue-anbk); color: white; }
+        .grid-item.answered { background: #28a745; color: white; }
+        .grid-item.ragu { background: var(--yellow-ragu); color: black; }
+
+        /* Buttons */
+        .btn { padding: 8px 20px; border: none; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        .btn-blue { background: var(--blue-anbk); color: white; }
+        .btn-red { background: #dc3545; color: white; }
+        .btn-outline { border: 1px solid #ccc; background: white; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div style="display:flex; align-items:center; gap:10px;">
+        <img src="https://pusmendik.kemdikbud.go.id/tka/simulasi_tka/assets/img/logo_kemdikbud.png" height="35">
+        <div><strong>PUSMENDIK</strong><br><small>APLIKASI ANBK</small></div>
+    </div>
+    <div id="timer" style="background:white; color:black; padding:5px 15px; border-radius:20px; font-weight:bold;">00:00:00</div>
+    <div id="user-info">admin | <button onclick="location.reload()" class="btn-red" style="padding:2px 10px; font-size:12px;">Logout</button></div>
+</header>
+
+<div id="login-screen" style="position:fixed; inset:0; background:white; z-index:2000; display:flex; align-items:center; justify-content:center;">
+    <div style="width:300px; text-align:center;">
+        <h2>Login Siswa</h2>
+        <input type="text" id="nama-siswa" placeholder="Masukkan Nama" style="width:100%; padding:10px; margin-bottom:10px;">
+        <button onclick="mulai()" class="btn-blue" style="width:100%; padding:12px;">Mulai Ujian</button>
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="pane" id="pane-stimulus">
+        <div style="background:#e1f5fe; color:#01579b; padding:5px 10px; font-weight:bold; display:inline-block; margin-bottom:10px;">INFORMASI SOAL</div>
+        <div id="stimulus-content"></div>
+    </div>
+    <div class="pane">
+        <div class="soal-title" id="nomor-title">Soal nomor 1</div>
+        <div id="soal-content"></div>
+    </div>
+</div>
+
+<footer>
+    <button class="btn btn-red" onclick="navigasi(-1)" id="btn-prev"> < Soal sebelumnya</button>
+    <label style="background:var(--yellow-ragu); padding:8px 15px; border-radius:20px; font-weight:bold; cursor:pointer;">
+        <input type="checkbox" id="check-ragu" onchange="toggleRagu()"> Ragu-ragu
+    </label>
+    <div style="display:flex; gap:10px;">
+        <button class="btn btn-outline" onclick="openGrid()">Daftar Soal ▦</button>
+        <button class="btn btn-blue" onclick="navigasi(1)" id="btn-next">Soal berikutnya ></button>
+    </div>
+</footer>
+
+<div id="modal-grid" onclick="closeGrid()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:10px;">
+            <strong>Daftar Soal</strong>
+            <button onclick="closeGrid()" style="border:none; background:none; font-size:20px; cursor:pointer;">&times;</button>
+        </div>
+        <div class="grid-soal" id="container-grid"></div>
+    </div>
+</div>
+
+<script>
+    let listSoal = [];
+    let currentIndex = 0;
+    let state = {}; // { index: { answered: false, ragu: false, val: null } }
+
+    async function mulai() {
+        const nama = document.getElementById('nama-siswa').value;
+        if(!nama) return alert('Isi nama!');
+        const res = await fetch('/api/soal');
+        listSoal = await res.json();
+        if(listSoal.length === 0) return alert('Soal belum ada!');
+        
+        document.getElementById('login-screen').style.display = 'none';
+        render();
+        startTimer(60 * 60); // 1 jam
+    }
+
+    function render() {
+        const s = listSoal[currentIndex];
+        document.getElementById('nomor-title').innerText = `Soal nomor ${currentIndex + 1}`;
+        document.getElementById('stimulus-content').innerHTML = `
+            <p>${s.stimulus || ''}</p>
+            ${s.gambar ? `<img src="/assets/${s.gambar}" class="stimulus-img">` : ''}
+        `;
+
+        let htmlSoal = `<p>${s.pertanyaan}</p>`;
+        if(s.tipe === 'pernyataan') {
+            htmlSoal += `<table><tr><th>Pernyataan</th><th>Benar</th><th>Salah</th></tr>`;
+            s.opsi.forEach((o, i) => {
+                htmlSoal += `<tr><td>${o}</td>
+                    <td><input type="radio" name="p-${i}" value="0"></td>
+                    <td><input type="radio" name="p-${i}" value="1"></td></tr>`;
+            });
+            htmlSoal += `</table>`;
+        } else {
+            s.opsi.forEach((o, i) => {
+                htmlSoal += `<label class="opsi-item">
+                    <input type="${s.tipe === 'ganda' ? 'checkbox' : 'radio'}" name="ans" value="${i}"> 
+                    ${String.fromCharCode(65+i)}. ${o}
+                </label>`;
+            });
+        }
+        document.getElementById('soal-content').innerHTML = htmlSoal;
+        document.getElementById('check-ragu').checked = state[currentIndex]?.ragu || false;
+        
+        // Navigasi button text
+        document.getElementById('btn-next').innerText = currentIndex === listSoal.length - 1 ? 'Selesai' : 'Soal berikutnya >';
+        document.getElementById('btn-prev').disabled = currentIndex === 0;
+    }
+
+    function navigasi(arah) {
+        if(arah === 1 && currentIndex === listSoal.length -1) return selesai();
+        currentIndex += arah;
+        render();
+    }
+
+    function toggleRagu() {
+        if(!state[currentIndex]) state[currentIndex] = {};
+        state[currentIndex].ragu = document.getElementById('check-ragu').checked;
+    }
+
+    function openGrid() {
+        const container = document.getElementById('container-grid');
+        container.innerHTML = listSoal.map((_, i) => {
+            let cls = 'grid-item';
+            if(i === currentIndex) cls += ' active';
+            else if(state[i]?.ragu) cls += ' ragu';
+            return `<div class="${cls}" onclick="jump(${i})">${i+1}</div>`;
+        }).join('');
+        document.getElementById('modal-grid').style.display = 'flex';
+    }
+
+    function jump(i) { currentIndex = i; render(); closeGrid(); }
+    function closeGrid() { document.getElementById('modal-grid').style.display = 'none'; }
+
+    function startTimer(sec) {
+        const display = document.getElementById('timer');
+        setInterval(() => {
+            let h = Math.floor(sec / 3600).toString().padStart(2,'0');
+            let m = Math.floor((sec % 3600) / 60).toString().padStart(2,'0');
+            let s = (sec % 60).toString().padStart(2,'0');
+            display.innerText = `${h}:${m}:${s}`;
+            if(sec-- <= 0) selesai();
+        }, 1000);
+    }
+
+    async function selesai() {
+        if(!confirm('Kirim semua jawaban?')) return;
+        alert('Terima kasih, ujian telah selesai.');
+        location.reload();
+    }
+</script>
+</body>
+</html>

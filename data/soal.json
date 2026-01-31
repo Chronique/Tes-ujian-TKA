@@ -1,0 +1,32 @@
+[
+  {
+    "pertanyaan": "Apa warna bendera Indonesia?",
+    "opsi": [
+      "Merah Putih",
+      "Putih Merah",
+      "Biru Putih",
+      "Hijau Kuning"
+    ],
+    "jawaban": 0
+  },
+  {
+    "pertanyaan": "Berapa hasil dari 10 + 5?",
+    "opsi": [
+      "12",
+      "15",
+      "20",
+      "25"
+    ],
+    "jawaban": 1
+  },
+  {
+    "pertanyaan": "Siapa penemu lampu pijar?",
+    "opsi": [
+      "Albert Einstein",
+      "Thomas Edison",
+      "Nikola Tesla",
+      "Isaac Newton"
+    ],
+    "jawaban": 1
+  }
+]

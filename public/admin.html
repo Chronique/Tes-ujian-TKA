@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Admin - CBT</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f0f2f5; }
+        .card { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background: #1652F0; color: white; }
+        textarea { width: 100%; height: 150px; margin: 10px 0; font-family: monospace; }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: bold; }
+        .btn-save { background: #28a745; }
+        .btn-download { background: #17a2b8; }
+        .warn { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Dashboard Admin</h2>
+
+    <div class="card">
+        <h3>1. Pengaturan Ujian</h3>
+        <label><input type="checkbox" id="toggle-nilai" onchange="updateConfig()"> Tampilkan Nilai Langsung ke Siswa</label>
+    </div>
+
+    <div class="card">
+        <h3>2. Import Soal Excel (.xlsx)</h3>
+        <input type="file" id="file-excel" accept=".xlsx">
+        <button class="btn btn-download" onclick="uploadExcel()">Upload Excel</button>
+        <hr>
+        <h3>Input Manual (JSON)</h3>
+        <textarea id="json-input"></textarea><br>
+        <button class="btn btn-save" onclick="simpanSoal()">Update Manual</button>
+    </div>
+
+    <div class="card">
+        <h3>3. Hasil Ujian Siswa</h3>
+        <button class="btn btn-download" onclick="downloadCSV()">Download CSV</button>
+        <table>
+            <thead><tr><th>Waktu</th><th>Nama</th><th>Nilai</th><th>Pelanggaran</th></tr></thead>
+            <tbody id="tabel-body"></tbody>
+        </table>
+    </div>
+
+    <script>
+        async function loadData() {
+            const [rSoal, rNilai, rConfig] = await Promise.all([
+                fetch('/api/soal'), fetch('/api/nilai'), fetch('/api/config')
+            ]);
+            
+            document.getElementById('json-input').value = JSON.stringify(await rSoal.json(), null, 2);
+            document.getElementById('toggle-nilai').checked = (await rConfig.json()).tampilNilai;
+
+            const nilai = await rNilai.json();
+            document.getElementById('tabel-body').innerHTML = nilai.map(n => `
+                <tr>
+                    <td>${n.waktu}</td>
+                    <td>${n.nama}</td>
+                    <td>${n.nilai}</td>
+                    <td class="${n.pelanggaran > 0 ? 'warn' : ''}">${n.pelanggaran || 0} Kali</td>
+                </tr>
+            `).join('');
+        }
+
+        async function updateConfig() {
+            const status = document.getElementById('toggle-nilai').checked;
+            await fetch('/api/config', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tampilNilai: status })
+            });
+        }
+
+        async function uploadExcel() {
+            const fileInput = document.getElementById('file-excel');
+            if (fileInput.files.length === 0) return alert('Pilih file!');
+            const formData = new FormData();
+            formData.append('fileExcel', fileInput.files[0]);
+            const res = await fetch('/api/upload-excel', { method: 'POST', body: formData });
+            alert((await res.json()).message);
+            location.reload();
+        }
+
+        async function simpanSoal() {
+            try {
+                const data = JSON.parse(document.getElementById('json-input').value);
+                await fetch('/api/soal', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                alert('Berhasil!');
+            } catch (e) { alert('JSON Salah!'); }
+        }
+
+        async function downloadCSV() {
+            const res = await fetch('/api/nilai');
+            const data = await res.json();
+            let csv = 'Waktu,Nama,Nilai,Pelanggaran\n';
+            data.forEach(n => csv += `"${n.waktu}","${n.nama}","${n.nilai}","${n.pelanggaran || 0}"\n`);
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `rekap_nilai.csv`;
+            a.click();
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
