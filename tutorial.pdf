@@ -1,56 +1,46 @@
-🛠️ Komponen Wajib di Komputer Admin
-1. Node.js (Runtime Utama)
-Ini adalah mesin yang menjalankan server.js kamu.
+Ini adalah draf panduan instruksi yang bisa kamu bagikan kepada siswa atau ditempel di papan tulis kelas. Panduan ini dirancang agar mereka tidak bingung saat mencoba mengakses server lokal dari laptop/HP masing-masing.
 
-Download: Buka nodejs.org
- dan pilih versi LTS (Recommended For Most Users).
+📖 Panduan Ujian Online Lokal (CBT)
+Selamat datang di sistem ujian lokal. Silakan ikuti instruksi di bawah ini agar ujian berjalan lancar:
 
-Cek Instalasi: Buka Terminal/CMD, ketik node -v. Jika muncul versi (misal: v20.x.x), berarti sudah berhasil.
+1. Koneksi Jaringan
+Pastikan perangkat kamu (Laptop/Smartphone) sudah terhubung ke WiFi: [Nama WiFi Kamu].
 
-2. Library Pendukung (Dependencies)
-Setelah Node.js terpasang, kamu perlu meng-install "bahan-bahan" atau library yang kita pakai di kode server. Buka terminal di folder proyek kamu, lalu ketik perintah ini:
+Ujian ini bersifat Lokal, kamu tidak memerlukan kuota internet, cukup terhubung ke jaringan tersebut.
 
-Bash
+2. Cara Mengakses Soal
+Buka browser (Google Chrome atau Microsoft Edge direkomendasikan).
 
-npm install express cors multer xlsx
+Ketik alamat IP berikut di bilah alamat (Address Bar):
 
-express: Untuk membuat server web.
+http://[ISI_ALAMAT_IP_ADMIN]:3000
 
-cors: Agar laptop siswa bisa mengakses server tanpa diblokir.
+Tekan Enter.
 
-multer: Untuk menangani proses upload file Excel.
+3. Identitas & Mulai Ujian
+Masukkan Nama Lengkap sesuai daftar hadir.
 
-xlsx: Untuk membaca data dari file Excel ke dalam sistem.
+Klik tombol "Mulai Ujian".
 
-3. Web Browser Terbaru
-Gunakan Google Chrome atau Microsoft Edge. Browser ini digunakan untuk membuka admin.html guna memantau hasil ujian dan mengunggah soal.
+Penting: Timer akan otomatis berjalan begitu kamu menekan tombol mulai. Sisa waktu dapat dilihat di pojok kanan atas.
 
-📂 Struktur Folder yang Benar
-Pastikan susunan folder di laptop Admin terlihat seperti ini agar tidak terjadi error:
+4. Aturan Penting (Anti-Curang)
+Untuk menjaga integritas ujian, sistem ini dilengkapi fitur pengawasan otomatis:
 
-📁 cbt-lokal/ (Folder utama)
+Dilarang Pindah Tab/Aplikasi: Jika kamu membuka tab baru atau aplikasi lain, sistem akan mencatat Pelanggaran.
 
-📁 data/ (Berisi soal.json, nilai.json, config.json)
+Klik Kanan & Copy-Paste: Fitur ini dinonaktifkan. Silakan fokus pada pengerjaan soal.
 
-📁 uploads/ (Folder sementara saat upload Excel)
+Waktu Habis: Jika waktu mencapai 00:00, jawaban akan terkirim otomatis secara instan.
 
-📁 public/
+5. Mengakhiri Ujian
+Periksa kembali semua jawaban kamu.
 
-📁 assets/ (Taruh semua gambar soal di sini)
+Klik tombol "Kirim Jawaban" di bagian paling bawah.
 
-📄 index.html (Halaman siswa)
+Jika muncul notifikasi "Ujian Selesai", kamu diperbolehkan menutup browser.
 
-📄 admin.html (Halaman admin)
+💡 Tips untuk Siswa
+Gunakan mode Full Screen (tekan F11 di laptop) agar lebih fokus dan menghindari ketidaksengajaan keluar dari halaman.
 
-📄 server.js
-
-📄 package.json
-
-⚙️ jalankan_server.bat (File untuk klik dua kali langsung jalan)
-
-📡 Perangkat Pendukung (Hardware)
-Selain software, kamu butuh Router WiFi atau Access Point.
-
-Laptop Admin dan semua perangkat siswa harus terhubung ke WiFi yang sama.
-
-Kamu tidak butuh koneksi internet (bisa offline), yang penting adalah kabel LAN atau sinyal WiFi yang stabil agar pengiriman jawaban tidak terputus.
+Jika halaman tidak muncul, pastikan kembali alamat IP yang kamu masukkan sudah benar (titik dan angkanya jangan sampai salah).
