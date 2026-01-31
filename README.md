@@ -26,7 +26,10 @@
 Setelah Node.js terpasang, kamu perlu meng-install "bahan-bahan" atau library yang kita pakai di kode server. Buka terminal di folder proyek kamu, lalu ketik perintah ini:
 
 ```Bash
+# Inisialisasi proyek (hanya sekali di awal)
+npm init -y
 
+# Install semua bahan yang kita butuhkan
 npm install express cors multer xlsx
 ```
 
