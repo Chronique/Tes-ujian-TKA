@@ -67,7 +67,54 @@ Pastikan susunan folder di laptop Admin terlihat seperti ini agar tidak terjadi 
 
 📄 ***package.json***
 
+
+
+
+---
+
+Cara Menjalankan di Localhost
+Setelah semua library di-install, ikuti langkah ini untuk menghidupkan servernya:
+
+Buka Terminal di VS Code (tekan Ctrl + J).
+
+Ketik Perintah:
+
+```Bash
+node server.js
+```
+*Lihat Pesan:* Jika muncul tulisan Server jalan di http://localhost:3000, berarti server sudah aktif.
+
+* **Buka Browser:**
+
+Untuk kamu (Admin): Ketik 
+
+```bash
+http://localhost:3000/admin.html.
+```
+
+Untuk tes sebagai Siswa: Ketik 
+```bash
+http://localhost:3000/index.html.
+```
+---
+## 💡 Tips Biar Lebih Cepat (Pake File .bat)
+
 ⚙️ ***jalankan_server.bat*** (File untuk klik dua kali langsung jalan)
+
+Gunakan file
+```bash
+jalankan_server.bat
+```
+Klik dua kali file tersebut.
+
+Server akan langsung jalan tanpa kamu perlu buka VS Code atau ngetik di terminal.
+
+## ⚠️ Hal Penting Saat Jalankan Localhost
+
+***Jangan Tutup Terminal: Kalau terminal/CMD kamu tutup, servernya mati dan siswa tidak bisa akses. Biarkan terminal tetap terbuka selama ujian berlangsung.***
+
+Update Folder: Pastikan folder uploads dan data sudah muncul setelah kamu menjalankan server untuk pertama kali agar tidak ada error saat upload Excel.
+---
 
 📡 ***Perangkat Pendukung*** (Hardware)
 
