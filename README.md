@@ -113,7 +113,11 @@ Server akan langsung jalan tanpa kamu perlu buka VS Code atau ngetik di terminal
 
 ***Jangan Tutup Terminal: Kalau terminal/CMD kamu tutup, servernya mati dan siswa tidak bisa akses. Biarkan terminal tetap terbuka selama ujian berlangsung.***
 
-Update Folder: Pastikan folder uploads dan data sudah muncul setelah kamu menjalankan server untuk pertama kali agar tidak ada error saat upload Excel.
+
+Update Folder: 
+
+* Pastikan folder uploads dan data sudah muncul setelah kamu menjalankan server untuk pertama kali agar tidak ada error saat upload Excel.
+
 ---
 
 📡 ***Perangkat Pendukung*** (Hardware)
