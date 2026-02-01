@@ -27,6 +27,8 @@ Setelah Node.js terpasang, kamu perlu meng-install "bahan-bahan" atau library ya
 
 ```Bash
 # Inisialisasi proyek (hanya sekali di awal)
+
+npm install
 npm init -y
 
 # Install semua bahan yang kita butuhkan
